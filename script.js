@@ -2,13 +2,40 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navList = document.querySelector('.nav-list');
+    const navLinks = document.querySelectorAll('.nav-link');
     
+    // Toggle mobile menu
     if (mobileMenuToggle && navList) {
         mobileMenuToggle.addEventListener('click', function() {
             navList.classList.toggle('active');
             mobileMenuToggle.classList.toggle('active');
         });
     }
+
+    // Close mobile menu when clicking a link
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (navList && navList.classList.contains('active')) {
+                navList.classList.remove('active');
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.classList.remove('active');
+                }
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isClickInsideNav = navList && navList.contains(event.target);
+        const isClickOnToggle = mobileMenuToggle && mobileMenuToggle.contains(event.target);
+        
+        if (!isClickInsideNav && !isClickOnToggle && navList && navList.classList.contains('active')) {
+            navList.classList.remove('active');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.classList.remove('active');
+            }
+        }
+    });
 
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
